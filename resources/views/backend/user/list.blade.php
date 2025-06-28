@@ -41,7 +41,7 @@
                                     <td class="px-6 py-3 text-left">{{$user->email ?? ''}}</td>
                                     <td class="px-6 py-3 text-left">{{\Carbon\Carbon::parse($user->created_at)->format('d M, Y')}}</td>
                                     <td class="px-6 py-3 text-center">
-                                        @can('destroy users')
+                                        @can('edit users')
                                             <a href="{{route('user.edit', $user->id)}}" class="bg-blue-700 text-sm rounded-md px-3 py-2 text-white hover:bg-blue-500">
                                                 Edit
                                             </a>
