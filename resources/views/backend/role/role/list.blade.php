@@ -49,7 +49,7 @@
                                             Edit
                                         </a>
 
-                                        <a href="javascript:void(0);" onclick="deletePermission({{ $role->id }})" class="bg-red-700 text-sm rounded-md px-3 py-2 text-white hover:bg-red-500">
+                                        <a href="javascript:void(0);" onclick="deleteRole({{ $role->id }})" class="bg-red-700 text-sm rounded-md px-3 py-2 text-white hover:bg-red-500">
                                             Delete
                                         </a>
                                     </td>
@@ -69,22 +69,22 @@
 
     <x-slot name="script">
         <script type="text/javascript">
-            {{--function deletePermission(id)--}}
-            {{--{--}}
-            {{--    if(confirm("Are you sure you want to delete?")){--}}
-            {{--        $.ajax({--}}
-            {{--            url : '{{ route("roles.permission.destroy", ":id") }}'.replace(":id", id),--}}
-            {{--            type : 'GET',--}}
-            {{--            dataType: 'json',--}}
-            {{--            headers:{--}}
-            {{--                'x-csrf-token': "{{ csrf_token() }}"--}}
-            {{--            },--}}
-            {{--            success:function (response){--}}
-            {{--                window.location.href = "{{route('roles.permission.index')}}"--}}
-            {{--            }--}}
-            {{--        })--}}
-            {{--    }--}}
-            {{--}--}}
+            function deleteRole(id)
+            {
+                if(confirm("Are you sure you want to delete?")){
+                    $.ajax({
+                        url : '{{ route("roles.destroy", ":id") }}'.replace(":id", id),
+                        type : 'GET',
+                        dataType: 'json',
+                        headers:{
+                            'x-csrf-token': "{{ csrf_token() }}"
+                        },
+                        success:function (response){
+                            window.location.href = "{{route('roles.index')}}"
+                        }
+                    })
+                }
+            }
         </script>
     </x-slot>
 </x-app-layout>

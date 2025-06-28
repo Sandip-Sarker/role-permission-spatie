@@ -84,7 +84,23 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
+        $role         = Role::find($id);
 
+        if ($role == null) {
+
+            session()->flash('error', 'Role Not Found');
+            return response()->json([
+                'staus' => false,
+            ]);
+        }
+
+        $role->delete();
+
+        session()->flash('success', 'Role Deleted Successfully');
+        return response()->json([
+            'staus' => true,
+
+        ]);
     }
 
 }

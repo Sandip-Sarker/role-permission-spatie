@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\Role\PermissionController;
 use App\Http\Controllers\Backend\Role\RoleController;
+use App\Http\Controllers\Backend\Artical\ArticalController;
 
 Route::prefix('admin')->group(function () {
 
@@ -23,6 +24,15 @@ Route::prefix('admin')->group(function () {
         Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
         Route::post('/update/{id}', [RoleController::class, 'update'])->name('roles.update');
         Route::get('/delete/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    });
+
+    Route::prefix('article')->group(function () {
+        Route::get('/', [ArticalController::class, 'index'])->name('article.index');
+        Route::get('/create', [ArticalController::class, 'create'])->name('article.create');
+        Route::post('/store', [ArticalController::class, 'store'])->name('article.post');
+        Route::get('/edit/{id}', [ArticalController::class, 'edit'])->name('article.edit');
+        Route::post('/update/{id}', [ArticalController::class, 'update'])->name('article.update');
+        Route::get('/delete/{id}', [ArticalController::class, 'destroy'])->name('article.destroy');
     });
 
 });
