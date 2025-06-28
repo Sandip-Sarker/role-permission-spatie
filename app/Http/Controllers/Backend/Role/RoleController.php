@@ -11,7 +11,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $data['roles'] = Role::orderBy('created_at', 'desc')->paginate(3);
+        $data['roles'] = Role::orderBy('created_at', 'desc')->paginate(5);
         return view('backend.role.role.list')->with($data);
     }
 
@@ -25,7 +25,7 @@ class RoleController extends Controller
     {
 
        $validator = $request->validate([
-           'name' => 'required|unique:roles,name|string|max:5',
+           'name' => 'required|unique:roles,name|string|max:20',
        ]);
 
        if ($validator) {
@@ -48,12 +48,38 @@ class RoleController extends Controller
 
     public function edit($id)
     {
+        $data['role']           = Role::findorFail($id);
+        $data['hasPermissions'] = $data['role']->permissions->pluck('name')->toArray();
+        $data['permission']     = Permission::orderBy('name', 'asc')->get();
 
+        return view('backend.role.role.edit')->with($data);
     }
 
     public function update(Request $request, $id)
     {
 
+        $role         = Role::findorFail($id);
+
+        $validator = $request->validate([
+            'name' => 'required|unique:roles,name,'.$id.',id',
+        ]);
+
+        if ($validator) {
+
+            $role->name = $request->input('name');
+            $role->save();
+
+            if (is_array($request->input('permission'))) {
+                $role->syncPermissions($request->input('permission'));
+            }else
+            {
+                $role->syncPermissions([]);
+            }
+
+            return redirect()->route('roles.index')->with('success', 'Role Added Successfully');
+        }else{
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
     }
 
     public function destroy($id)

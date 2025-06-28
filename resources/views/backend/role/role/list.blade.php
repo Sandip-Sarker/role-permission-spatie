@@ -45,7 +45,7 @@
                                     </td>
                                     <td class="px-6 py-3 text-left">{{\Carbon\Carbon::parse($role->created_at)->format('d M, Y')}}</td>
                                     <td class="px-6 py-3 text-center">
-                                        <a href="{{route('roles.permission.edit', $role->id)}}" class="bg-blue-700 text-sm rounded-md px-3 py-2 text-white hover:bg-blue-500">
+                                        <a href="{{route('roles.edit', $role->id)}}" class="bg-blue-700 text-sm rounded-md px-3 py-2 text-white hover:bg-blue-500">
                                             Edit
                                         </a>
 
