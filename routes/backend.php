@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\Role\PermissionController;
 use App\Http\Controllers\Backend\Role\RoleController;
 use App\Http\Controllers\Backend\Artical\ArticalController;
+use App\Http\Controllers\Backend\User\UserController;
 
 Route::prefix('admin')->group(function () {
 
@@ -33,6 +34,13 @@ Route::prefix('admin')->group(function () {
         Route::get('/edit/{id}', [ArticalController::class, 'edit'])->name('article.edit');
         Route::post('/update/{id}', [ArticalController::class, 'update'])->name('article.update');
         Route::get('/delete/{id}', [ArticalController::class, 'destroy'])->name('article.destroy');
+    });
+
+    Route::prefix('user')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+        Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update');
+        Route::get('/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
     });
 
 });
