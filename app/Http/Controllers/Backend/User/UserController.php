@@ -6,9 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-
-class UserController extends Controller
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
+class UserController extends Controller implements HasMiddleware
 {
+    public static function middleware()
+    {
+        return [
+            new Middleware('permission:view users', only: ['index']),
+            new Middleware('permission:edit users', only: ['edit']),
+        ];
+    }
     public function index()
     {
         $data['users'] = User::orderBy('created_at', 'desc')->paginate(2);

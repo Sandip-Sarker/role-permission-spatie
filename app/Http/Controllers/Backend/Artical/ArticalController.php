@@ -5,9 +5,20 @@ namespace App\Http\Controllers\Backend\Artical;
 use App\Http\Controllers\Controller;
 use App\Models\Artical;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ArticalController extends Controller
+class ArticalController extends Controller implements HasMiddleware
 {
+    public static function middleware()
+    {
+        return [
+          new Middleware('permission:view articles', only: ['index']),
+          new Middleware('permission:edit articles', only: ['edit']),
+          new Middleware('permission:create articles', only: ['create']),
+          new Middleware('permission:destroy articles', only: ['destroy']),
+        ];
+    }
     public function index()
     {
         $data['articles'] = Artical::orderBy('created_at', 'desc')->paginate(2);

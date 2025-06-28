@@ -6,9 +6,11 @@
                 {{ __('Article') }}
             </h2>
 
-            <a href="{{route('article.create')}}" class="bg-slate-700 text-sm rounded-md px-3 py-2 text-white">
-                Create
-            </a>
+            @can('create articles')
+                <a href="{{route('article.create')}}" class="bg-slate-700 text-sm rounded-md px-3 py-2 text-white">
+                    Create
+                </a>
+            @endcan
         </div>
     </x-slot>
 
@@ -40,13 +42,17 @@
                                     <td class="px-6 py-3 text-left">{{$article->author ?? ''}}</td>
                                     <td class="px-6 py-3 text-left">{{\Carbon\Carbon::parse($article->created_at)->format('d M, Y')}}</td>
                                     <td class="px-6 py-3 text-center">
-                                        <a href="{{route('article.edit', $article->id)}}" class="bg-blue-700 text-sm rounded-md px-3 py-2 text-white hover:bg-blue-500">
-                                            Edit
-                                        </a>
+                                        @can('edit articles')
+                                            <a href="{{route('article.edit', $article->id)}}" class="bg-blue-700 text-sm rounded-md px-3 py-2 text-white hover:bg-blue-500">
+                                                Edit
+                                            </a>
+                                        @endcan
 
-                                        <a href="javascript:void(0);" onclick="deleteArticle({{ $article->id }})" class="bg-red-700 text-sm rounded-md px-3 py-2 text-white hover:bg-red-500">
-                                            Delete
-                                        </a>
+                                        @can('destroy articles')
+                                            <a href="javascript:void(0);" onclick="deleteArticle({{ $article->id }})" class="bg-red-700 text-sm rounded-md px-3 py-2 text-white hover:bg-red-500">
+                                                Delete
+                                            </a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

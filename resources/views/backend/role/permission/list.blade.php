@@ -6,9 +6,11 @@
                    {{ __('Permission') }}
                </h2>
 
+               @can('create permissions')
                <a href="{{route('roles.permission.create')}}" class="bg-slate-700 text-sm rounded-md px-3 py-2 text-white">
                    Create
                </a>
+               @endcan
            </div>
     </x-slot>
 
@@ -36,13 +38,17 @@
                                         <td class="px-6 py-3 text-left">{{$permission->name}}</td>
                                         <td class="px-6 py-3 text-left">{{\Carbon\Carbon::parse($permission->created_at)->format('d M, Y')}}</td>
                                         <td class="px-6 py-3 text-center">
-                                            <a href="{{route('roles.permission.edit', $permission->id)}}" class="bg-blue-700 text-sm rounded-md px-3 py-2 text-white hover:bg-blue-500">
-                                                Edit
-                                            </a>
+                                            @can('edit permissions')
+                                                <a href="{{route('roles.permission.edit', $permission->id)}}" class="bg-blue-700 text-sm rounded-md px-3 py-2 text-white hover:bg-blue-500">
+                                                    Edit
+                                                </a>
+                                            @endcan
 
-                                            <a href="javascript:void(0);" onclick="deletePermission({{ $permission->id }})" class="bg-red-700 text-sm rounded-md px-3 py-2 text-white hover:bg-red-500">
-                                                Delete
-                                            </a>
+                                            @can('destroy permissions')
+                                                <a href="javascript:void(0);" onclick="deletePermission({{ $permission->id }})" class="bg-red-700 text-sm rounded-md px-3 py-2 text-white hover:bg-red-500">
+                                                    Delete
+                                                </a>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

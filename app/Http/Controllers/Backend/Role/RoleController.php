@@ -6,9 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class RoleController extends Controller
+class RoleController extends Controller implements HasMiddleware
 {
+    public static function middleware()
+    {
+        return [
+            new Middleware('permission:view roles', only: ['index']),
+            new Middleware('permission:edit roles', only: ['edit']),
+            new Middleware('permission:create roles', only: ['create']),
+            new Middleware('permission:destroy roles', only: ['destroy']),
+        ];
+    }
     public function index()
     {
         $data['roles'] = Role::orderBy('created_at', 'desc')->paginate(5);

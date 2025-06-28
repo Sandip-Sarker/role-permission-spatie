@@ -5,10 +5,11 @@
             <h2 class="font-semibold text-xl text-gray-800  leading-tight">
                 {{ __('User') }}
             </h2>
-
-            <a href="" class="bg-slate-700 text-sm rounded-md px-3 py-2 text-white">
-                Create
-            </a>
+            @can('create users')
+                <a href="" class="bg-slate-700 text-sm rounded-md px-3 py-2 text-white">
+                    Create
+                </a>
+            @endcan
         </div>
     </x-slot>
 
@@ -40,9 +41,11 @@
                                     <td class="px-6 py-3 text-left">{{$user->email ?? ''}}</td>
                                     <td class="px-6 py-3 text-left">{{\Carbon\Carbon::parse($user->created_at)->format('d M, Y')}}</td>
                                     <td class="px-6 py-3 text-center">
-                                        <a href="{{route('user.edit', $user->id)}}" class="bg-blue-700 text-sm rounded-md px-3 py-2 text-white hover:bg-blue-500">
-                                            Edit
-                                        </a>
+                                        @can('destroy users')
+                                            <a href="{{route('user.edit', $user->id)}}" class="bg-blue-700 text-sm rounded-md px-3 py-2 text-white hover:bg-blue-500">
+                                                Edit
+                                            </a>
+                                        @endcan
 
 {{--                                        <a href="javascript:void(0);" onclick="deleteArticle({{ $article->id }})" class="bg-red-700 text-sm rounded-md px-3 py-2 text-white hover:bg-red-500">--}}
 {{--                                            Delete--}}
