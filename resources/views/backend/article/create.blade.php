@@ -15,7 +15,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="{{route('article.post')}}" method="POST">
+                    <form action="{{route('article.post')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div>
                             <label for="" class="text-lg font-medium">Title</label>
@@ -41,6 +41,16 @@
                                 <input type="text"  name="author"  value="{{old('author')}}" placeholder="Enter author" class="border-gray-300 shadow-sm w-1/2 rounded-lg" >
                             </div>
                             @error('author')
+                            <p class="text-red-500 font-medium"> {{$message}}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="" class="text-lg font-medium">Image</label>
+                            <div class="my-3">
+                                <input type="file" name="image"  class="border-gray-300 shadow-sm w-1/2 rounded-lg">
+                            </div>
+                            @error('image')
                             <p class="text-red-500 font-medium"> {{$message}}</p>
                             @enderror
                         </div>

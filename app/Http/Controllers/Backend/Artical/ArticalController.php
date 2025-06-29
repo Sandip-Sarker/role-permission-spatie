@@ -7,6 +7,9 @@ use App\Models\Artical;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ArticalController extends Controller implements HasMiddleware
 {
@@ -36,7 +39,22 @@ class ArticalController extends Controller implements HasMiddleware
         $validatedData = $request->validate([
             'title' => 'required|min:5',
             'author' => 'required|max:255',
+            'image' => 'required',
         ]);
+
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $name = time() . '.' . $file->getClientOriginalExtension();
+            $path = 'images/' . $name; // storage/app/public/images/
+
+            // Resize the image using Intervention
+            $manager    = new ImageManager(new Driver());
+            $image      = $manager->read($file)->resize(500, 300);
+
+            // Encode as PNG and store in Laravel storage
+            Storage::disk('public')->put($path, (string) $image->toPng());
+        }
 
         if ($validatedData)
         {
@@ -44,6 +62,7 @@ class ArticalController extends Controller implements HasMiddleware
             $article->title = $request->input('title');
             $article->description =  $request->input('content');
             $article->author = $request->input('author');
+            $article->image = $path;
             $article->save();
 
             return redirect()->route('article.index')->with('success', 'Artical Added Successfully');
