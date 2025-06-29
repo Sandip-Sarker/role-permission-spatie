@@ -10,6 +10,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Yajra\DataTables\DataTables;
 
 class ArticalController extends Controller implements HasMiddleware
 {
@@ -22,10 +23,35 @@ class ArticalController extends Controller implements HasMiddleware
           new Middleware('permission:destroy articles', only: ['destroy']),
         ];
     }
-    public function index()
+    public function index(Request $request)
     {
-        $data['articles'] = Artical::orderBy('created_at', 'desc')->paginate(2);
-        return view('backend.article.list')->with($data);
+        if ($request->ajax()) {
+            $data = Artical::latest()->get();
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('image', function($row) {
+                    $url = asset('storage/' . $row->image);
+                    return '<img src="'. $url .'" width="50" height="50">';
+                })
+                ->addColumn('action', function ($row) {
+                    $buttons = '';
+
+                    if (auth()->user()->can('edit articles')) {
+                        $buttons .= '<a href="'. route('article.edit', $row->id) .'" class="bg-blue-700 text-sm rounded-md py-2 text-white hover:bg-blue-500">Edit</a> ';
+                    }
+
+                    if (auth()->user()->can('destroy articles')) {
+                        $buttons .= '<a href="javascript:void(0);" onclick="deleteArticle('. $row->id .')" class="bg-red-700 text-sm rounded-md py-2 text-white hover:bg-red-500">Delete</a>';
+                    }
+
+                    return $buttons;
+                })
+                ->rawColumns(['image', 'action'])
+                ->make(true);
+        }
+
+        return view('backend.article.list');
     }
 
     public function create()
@@ -51,9 +77,9 @@ class ArticalController extends Controller implements HasMiddleware
             // Resize the image using Intervention
             $manager    = new ImageManager(new Driver());
             $image      = $manager->read($file)->resize(500, 300);
-
             // Encode as PNG and store in Laravel storage
             Storage::disk('public')->put($path, (string) $image->toPng());
+
         }
 
         if ($validatedData)
