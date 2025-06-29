@@ -60,6 +60,7 @@ class PermissionController extends Controller implements HasMiddleware
 
         $permission->name = $request->input('name');
         $permission->save();
+
         return redirect()->route('roles.permission.index')->with('success', 'Permission updated successfully');
 
     }
